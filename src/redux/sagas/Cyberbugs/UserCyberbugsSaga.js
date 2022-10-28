@@ -31,7 +31,7 @@ function* signinSaga(action) {
 
         // let history = yield select(state=> state.HistoryReducer.history)
         
-        history.push('/home');
+        history.push('/cyberbugs');
       
     }catch(err){ 
         console.log(err.response.data)

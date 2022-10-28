@@ -60,21 +60,8 @@ const LoginCyberBugsWithFormik =  withFormik({
 
     }),
     handleSubmit: ({email,password}, {props, setSubmitting }) => {
-
-        // let action = {
-        //     type:USER_SIGNIN_API,
-        //     userLogin: {
-        //         email:values.email,
-        //         password:values.password
-        //     }
-        // }
-
         setSubmitting(true);
         props.dispatch(singinCyberbugAction(email,password));
-        
-        // console.log(props)
-        // console.log(values);
-
     },
     displayName: 'LoginCyberBugs',
   })(LoginCyberBugs);
