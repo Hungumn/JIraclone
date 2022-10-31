@@ -31,15 +31,13 @@ function App() {
       <LoadingComponent />
       <DrawerCyberBug/>
       <Switch>
-        <HomeTemplate path="/" exact Component={Home} />
         <HomeTemplate exact path='/contact' Component={Contact} />
         <HomeTemplate exact path='/about' Component={About} />
         <UserLoginTemplate exact path='/login' Component={LoginCyberBugs} />
         <HomeTemplate exact path='/profile' Component={Profile} />
-        <CyberbugsTemplate exact path='/cyberbugs' Component={indexCyberBugs} />
+        <CyberbugsTemplate exact path='/' Component={indexCyberBugs} />
         <CyberbugsTemplate exact path='/createproject' Component={CreateProject} />
         <CyberbugsTemplate exact path='/projectmanagement' Component={ProjectManagement} />
-        <HomeTemplate exact path='/' component={Home} />
         <HomeTemplate path="*" component={PageNotFound} />
 
       </Switch>
