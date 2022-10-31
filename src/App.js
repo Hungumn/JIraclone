@@ -36,8 +36,9 @@ function App() {
         <UserLoginTemplate exact path='/login' Component={LoginCyberBugs} />
         <HomeTemplate exact path='/profile' Component={Profile} />
         <CyberbugsTemplate exact path='/' Component={indexCyberBugs} />
-        <CyberbugsTemplate exact path='/createproject' Component={CreateProject} />
-        <CyberbugsTemplate exact path='/projectmanagement' Component={ProjectManagement} />
+        <CyberbugsTemplate exact path='/create-project' Component={CreateProject} />
+        <CyberbugsTemplate exact path='/project-management' Component={ProjectManagement} />
+        <CyberbugsTemplate exact path='/project-Detail/:projectId' Component={indexCyberBugs} />
         <HomeTemplate path="*" component={PageNotFound} />
 
       </Switch>

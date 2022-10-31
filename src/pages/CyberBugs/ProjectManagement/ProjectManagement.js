@@ -8,32 +8,45 @@ import {
 	Image,
 	message,
 	Popconfirm,
+	Popover,
+	AutoComplete,
 } from 'antd';
 import ReactHtmlParser from 'react-html-parser';
-import { FormOutlined, DeleteOutlined } from '@ant-design/icons';
+import { FormOutlined, DeleteOutlined, PlusOutlined, UserOutlined } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux';
-import { OPEN_DRAWER } from '../../../redux/constants/Cyberbugs/Cyberbugs';
+import { ADD_USER_PROJECT_API, GET_LIST_PROJECT_SAGA, GET_USER_API, OPEN_DRAWER, REMOVE_USER_PROJECT_API } from '../../../redux/constants/Cyberbugs/Cyberbugs';
 import FormEditProject from '../../../components/Form/FormEditProject';
+import {useCallback} from 'react';
+import _debounce from 'lodash/debounce';
+import { NavLink } from 'react-router-dom';
 
-const confirm = (e) => {
-	console.log(e);
-	message.success('Click on Yes');
-};
+const { Column, ColumnGroup } = Table;
+
 
 export default function ProjectManagement(props) {
 	//Lấy dữ liệu từ reducer về component
 	const projectList = useSelector(
 		(state) => state.ProjectCyberBugsReducer.projectList
 	);
+
+	const {userSearch} = useSelector(state=> state.UserLoginCyberBugsReducer)
+	const [value,SetValue]  = useState('')
 	//Sử dụng useDispatch để gọi action
 	const dispatch = useDispatch();
 	const [state, setState] = useState({
 		filteredInfo: null,
 		sortedInfo: null,
 	});
-
+	
+	const handleDebounceFn =(value) => {
+		dispatch({
+			type: GET_USER_API,
+			keyWord: value
+		})
+	}
+	const debounceFn = useCallback(_debounce(handleDebounceFn, 1000), []);
 	useEffect(() => {
-		dispatch({ type: 'GET_LIST_PROJECT_SAGA' });
+		dispatch({ type: GET_LIST_PROJECT_SAGA });
 	}, [dispatch]);
 
 	const handleChange = (pagination, filters, sorter) => {
@@ -81,6 +94,9 @@ export default function ProjectManagement(props) {
 			title: 'projectName',
 			dataIndex: 'projectName',
 			key: 'projectName',
+			render:(text,record,index)=>{
+				return <NavLink to={`project-Detail/${record.id}`}>{text}</NavLink>
+			},
 			sorter: (item2, item1) => {
 				let projectName1 = item1.projectName?.trim().toLowerCase();
 				let projectName2 = item2.projectName?.trim().toLowerCase();
@@ -128,13 +144,73 @@ export default function ProjectManagement(props) {
 					<div>
 						{record.members?.slice(0,3).map((member, index) => {
 							return (
-								<Avatar
-									key={index}
-									src={member.avatar}
-								/>
-							);
+								<Popover key={index} placement="bottom" title="Members" trigger="click" content={() => {
+									return <table className="table">
+										<thead>
+											<tr>
+												<th>Id</th>
+												<th>avatar</th>
+												<th>name</th>
+												<th></th>
+											</tr>
+										</thead>
+										<tbody>
+											{record.members?.map((item, index) => {
+												return <tr key={index}>
+													<td>{item.userId}</td>
+													<td><img src={item.avatar} width="30" height="30" style={{borderRadius:'15px'}} /></td>
+													<td>{item.name}</td>
+													<td>
+														<button onClick={()=>{
+															dispatch({
+																type:REMOVE_USER_PROJECT_API,
+																userProject:{
+																	userId:item.userId,
+																	projectId:record.id
+																}
+															})
+														}} className="btn btn-danger" style={{borderRadius:'50%'}}>X</button>
+													</td>
+												</tr>
+											})}
+										</tbody>
+									</table>
+								}}>
+									<Avatar key={index} src={member.avatar} />
+								</Popover>
+							)
 						})}
 						{record.members?.length > 3 ? <Avatar>...</Avatar> :''}
+						<Popover 
+						placement="top" 
+						title={'Add-User'} 
+						content={()=>{
+							return (
+                                <AutoComplete 
+								style={{width:'100%'}} 
+								onSearch={(value) =>{
+									debounceFn(value)
+								}} 
+								options={userSearch?.map((user,index)=>{
+									return {label:user.name,value:user.userId.toString()}
+								})}
+								onSelect={(valueSelect,option)=> {
+									SetValue(option.label)
+									dispatch({
+										type:ADD_USER_PROJECT_API,
+										userProject:{
+											projectId:record.id,
+											userId:valueSelect
+										}
+									})
+								}}
+								value={value}
+								onChange={(text)=>{SetValue(text)}}
+								/>)
+							}} 
+						trigger="click">
+							<Button style={{marginLeft:'0.5rem'}} type="dashed" shape="circle" icon={<PlusOutlined />}></Button>
+						</Popover>
 					</div>
 				);
 			},

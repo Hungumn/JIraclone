@@ -1,6 +1,16 @@
 import React from 'react'
 
-export default function InfoMain() {
+export default function InfoMain(props) {
+    console.log('info',props.projectDetail.members)
+    const renderAvatar =() =>{
+        return props.projectDetail.members?.map((user,index)=>{
+            return(
+                <div className='avatar' key={index}>
+                    <img src={user.avatar} alt={user.avatar} />
+                </div>
+            )
+        })
+    }
     return (
         <>
             <h3>Cyber Board</h3>
@@ -10,15 +20,7 @@ export default function InfoMain() {
                     <i className="fa fa-search" />
                 </div>
                 <div className="avatar-group" style={{ display: 'flex' }}>
-                    <div className="avatar">
-                        <img src={require('../../../assets/img/download (1).jfif')} alt='1' />
-                    </div>
-                    <div className="avatar">
-                    <img src={require('../../../assets/img/download (2).jfif')} alt='2' />
-                    </div>
-                    <div className="avatar">
-                    <img src={require('../../../assets/img/download (3).jfif')} alt='3' />
-                    </div>
+                    {renderAvatar()}
                 </div>
                 <div style={{ marginLeft: 20 }} className="text">Only My Issues</div>
                 <div style={{ marginLeft: 20 }} className="text">Recently Updated</div>

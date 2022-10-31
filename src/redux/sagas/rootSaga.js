@@ -10,11 +10,15 @@ export function* rootSaga() {
   yield all([
     //Nghiệp vụ cyberbugs .... ,
     Cyberbugs.theoDoiSignin(),
+    Cyberbugs.watchGetUser(),
+    Cyberbugs.watchAddUserProject(),
+    Cyberbugs.watchRemoveUserProject(),
     ProjectCategorySaga.theoDoigetAllProjectCategory(),
     ProjectSaga.theoDoiCreateProjectSaga(),
     ProjectSaga.theoDoiGetListProjectSaga(),
     ProjectSaga.watchUpdateProjectSaga(),
     ProjectSaga.watchDeleteProjectSaga(),
+    ProjectSaga.watchProjectDetail()
   ])
 
 

@@ -1,6 +1,7 @@
 import React from 'react'
 
-export default function HeaderMain() {
+export default function HeaderMain(props) {
+    const {projectDetail} = props
     return (
         <div className="header">
             <nav aria-label="breadcrumb">
@@ -8,8 +9,8 @@ export default function HeaderMain() {
                     <li className="breadcrumb-item">Project</li>
                     <li className="breadcrumb-item">CyberLearn</li>
                     <li className="breadcrumb-item active" aria-current="page">
-                        Cyber Board
-      </li>
+                        {projectDetail.projectName}
+                    </li>
                 </ol>
             </nav>
         </div>

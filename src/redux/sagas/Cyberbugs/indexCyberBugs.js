@@ -1,36 +1,30 @@
-import React from 'react'
-import { useEffect } from 'react'
-import { Router } from 'react-router-dom'
+
+import React,{ useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux';
 import ContentMain from '../../../components/Cyberbugs/Main/ContentMain'
 import HeaderMain from '../../../components/Cyberbugs/Main/HeaderMain'
 import InfoMain from '../../../components/Cyberbugs/Main/InfoMain'
-import { history } from '../../../util/history'
 
-const checkLogin = () => {
-    if(localStorage.getItem('USER_LOGIN') !== null){
-        return true
-    }
-    return false
-}
-// useEffect(() =>{
-//     try {
-//         if (!checkLogin()){
-//             Router.push('/login')
-//         }
-//     } catch (error) {
-//         console.log(error)
-//     }
-// },[])
+export default function IndexCyberBugs(props) {
+    const {projectDetail} = useSelector(state => state.ProjectReducer)
+    console.log("projectDetail",projectDetail)
+    const dispatch = useDispatch();
+    useEffect(()=>{
+        //Khi người dùng link qua trang này bằng thẻ navlink hoặc người dùng tự gõ url thì ta sẽ lấy tham số từ url => gọi saga
+        const {projectId} = props.match.params;
+        dispatch({
+            type:'GET_PROJECT_DETAIL',
+            projectId
+        })
 
-export default function indexCyberBugs() {
-
-    console.log(checkLogin())
+    },[])
+   
 
     return (
         <div className="main">
-            <HeaderMain />
+            <HeaderMain projectDetail={projectDetail} />
 
-            <InfoMain />
+            <InfoMain projectDetail={projectDetail} />
 
             <ContentMain />
         </div>

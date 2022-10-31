@@ -3,7 +3,7 @@ import { cyberbugsService } from "../../../services/CyberbugsService";
 import { STATUS_CODE } from "../../../util/constants/settingSystem";
 import { DISPLAY_LOADING, HIDE_LOADING } from "../../constants/LoadingConst";
 import {history} from '../../../util/history';
-import { CLOSE_DRAWER } from "../../constants/Cyberbugs/Cyberbugs";
+import { CLOSE_DRAWER, GET_LIST_PROJECT_SAGA } from "../../constants/Cyberbugs/Cyberbugs";
 import { projectService } from "../../../services/ProjectService";
 import { notifiFunction } from "../../../util/Notification/notificationCyberbugs";
 function* createProjectSaga(action) {
@@ -22,7 +22,7 @@ function* createProjectSaga(action) {
         if (status === STATUS_CODE.SUCCESS) {
             console.log(data)
 
-            history.push('/projectmanagement');
+            history.push('/project-management');
         }
 
 
@@ -69,7 +69,7 @@ function *getListProjectSaga(action) {
 
 
 export function* theoDoiGetListProjectSaga() {
-    yield takeLatest('GET_LIST_PROJECT_SAGA', getListProjectSaga);
+    yield takeLatest(GET_LIST_PROJECT_SAGA, getListProjectSaga);
 }
 
 // ****************************************************************
@@ -89,7 +89,7 @@ function *updateProjectSaga(action) {
             console.log(data)
         }
         yield put({
-            type:'GET_LIST_PROJECT_SAGA'
+            type:GET_LIST_PROJECT_SAGA
         })
         yield put({
             type:CLOSE_DRAWER
@@ -127,9 +127,7 @@ function *deleteProjectSaga(action) {
         }else {
             notifiFunction('error','Delete project fail !')
         }
-        // yield put({
-        //     type:'GET_LIST_PROJECT_SAGA'
-        // })
+
         yield call(getListProjectSaga);
         yield put({
             type:'CLOSE_DRAWER'
@@ -146,4 +144,34 @@ function *deleteProjectSaga(action) {
 
 export function* watchDeleteProjectSaga() {
     yield takeLatest('DELETE_PROJECT_SAGA', deleteProjectSaga);
+}
+
+// ****************************************************************
+
+
+function *getProjectDetailSaga(action) { 
+    console.log(action)
+    yield put({
+        type: DISPLAY_LOADING
+    })
+    yield delay (500);
+    try {
+        const { data, status } = yield call(() => projectService.getProjectDetail(action.projectId));
+        yield put({
+            type:'PUT_PROJECT_DETAIL',
+            projectDetail:data.content
+        })
+    } catch (err) {
+        notifiFunction('error','404 Not Found!')
+        console.log(err);
+        history.push('/project-management')
+    }
+    yield put({
+        type: HIDE_LOADING
+    })
+}
+
+
+export function* watchProjectDetail() {
+    yield takeLatest('GET_PROJECT_DETAIL', getProjectDetailSaga);
 }
