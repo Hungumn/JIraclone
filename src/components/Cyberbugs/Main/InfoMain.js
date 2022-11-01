@@ -1,9 +1,11 @@
 import React from 'react'
+import ReactHtmlParser from 'react-html-parser';
 
 export default function InfoMain(props) {
-    console.log('info',props.projectDetail.members)
+    
+    const {projectDetail} = props
     const renderAvatar =() =>{
-        return props.projectDetail.members?.map((user,index)=>{
+        return projectDetail.members?.map((user,index)=>{
             return(
                 <div className='avatar' key={index}>
                     <img src={user.avatar} alt={user.avatar} />
@@ -13,7 +15,10 @@ export default function InfoMain(props) {
     }
     return (
         <>
-            <h3>Cyber Board</h3>
+            <h3>{projectDetail.projectName}</h3>
+            <section>
+                {ReactHtmlParser(projectDetail.description)}
+            </section>
             <div className="info" style={{ display: 'flex' }}>
                 <div className="search-block">
                     <input className="search" />
