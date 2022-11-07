@@ -14,7 +14,7 @@ import {
 import ReactHtmlParser from 'react-html-parser';
 import { FormOutlined, DeleteOutlined, PlusOutlined, UserOutlined } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux';
-import { ADD_USER_PROJECT_API, GET_LIST_PROJECT_SAGA, GET_USER_API, OPEN_DRAWER, REMOVE_USER_PROJECT_API } from '../../../redux/constants/Cyberbugs/Cyberbugs';
+import { ADD_USER_PROJECT_API, GET_LIST_PROJECT_SAGA, GET_USER_API, OPEN_DRAWER, OPEN_FORM_EDIT_PROJECT, REMOVE_USER_PROJECT_API } from '../../../redux/constants/Cyberbugs/Cyberbugs';
 import FormEditProject from '../../../components/Form/FormEditProject';
 import {useCallback} from 'react';
 import _debounce from 'lodash/debounce';
@@ -226,7 +226,8 @@ export default function ProjectManagement(props) {
 							className="btn mr-2 btn-primary"
 							onClick={() => {
 								const action = {
-									type: 'OPEN_FORM_EDIT_PROJECT',
+									type: OPEN_FORM_EDIT_PROJECT,
+									title:'Edit Project',
 									Component: <FormEditProject />,
 								};
 								dispatch(action);

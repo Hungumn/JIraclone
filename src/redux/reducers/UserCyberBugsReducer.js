@@ -13,7 +13,7 @@ if(localStorage.getItem(USER_LOGIN)) {
 
 const stateDefault =  {
     userLogin : usLogin,
-    userSearch:[]
+    userSearch:[],
 }
 
 

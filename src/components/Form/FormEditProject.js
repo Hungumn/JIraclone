@@ -93,7 +93,7 @@ function FormEditProject(props) {
         alignleft aligncenter alignright alignjustify | \
         bullist numlist outdent indent | removeformat | help',
 							}}
-							onEditorChange={handleEditorChange}
+							onloadingChange={handleEditorChange}
 						/>
 					</div>
 				</div>
